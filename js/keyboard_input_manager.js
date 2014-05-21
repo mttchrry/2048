@@ -61,7 +61,10 @@ KeyboardInputManager.prototype.listen = function () {
         self.emit("move", mapped);
       }
     }
-
+    // the B key is for go back.  Cheatingly good right now. 
+    if(!modifiers && event.which === 66){
+      self.emit("back");
+    } 
     // R key restarts the game
     if (!modifiers && event.which === 82) {
       self.restart.call(self, event);
@@ -130,6 +133,11 @@ KeyboardInputManager.prototype.listen = function () {
 KeyboardInputManager.prototype.restart = function (event) {
   event.preventDefault();
   this.emit("restart");
+};
+
+KeyboardInputManager.prototype.back = function (event) {
+  event.preventDefault();
+  this.emit("back");
 };
 
 KeyboardInputManager.prototype.keepPlaying = function (event) {

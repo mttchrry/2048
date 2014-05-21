@@ -9,6 +9,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+  this.inputManager.on("back", this.back.bind(this));
 
   this.setup();
 }
@@ -57,7 +58,7 @@ GameManager.prototype.setup = function () {
     // Add the initial tiles
     this.addStartTiles();
   }
-
+  this.lastAddedTile = null;
   // Update the actuator
   this.actuate();
 };
@@ -77,6 +78,7 @@ GameManager.prototype.addRandomTile = function () {
     var tile = new Tile(this.grid.randomAvailableCell(), value);
 
     this.grid.insertTile(tile);
+    this.lastAddedTile = tile;
   }
 };
 
@@ -129,6 +131,13 @@ GameManager.prototype.moveTile = function (tile, cell) {
   this.grid.cells[tile.x][tile.y] = null;
   this.grid.cells[cell.x][cell.y] = tile;
   tile.updatePosition(cell);
+};
+
+// Go back and remove the most recently added title. Currently this is broken good.
+// as merges don't get undone. 
+GameManager.prototype.back = function () {
+  //if(!this.lastAddedTile || this.isGameTerminated()) return;
+  self.move(1);
 };
 
 // Move tiles on the grid in the specified direction
@@ -190,7 +199,7 @@ GameManager.prototype.move = function (direction) {
     if (!this.movesAvailable()) {
       this.over = true; // Game over!
     }
-
+    this.lastMove = direction;
     this.actuate();
   }
 };
@@ -255,7 +264,7 @@ GameManager.prototype.tileMatchesAvailable = function () {
       tile = this.grid.cellContent({ x: x, y: y });
 
       if (tile) {
-        for (var direction = 0; direction < 4; direction++) {
+        for (var direction = 0; direction < this.size; direction++) {
           var vector = self.getVector(direction);
           var cell   = { x: x + vector.x, y: y + vector.y };
 
