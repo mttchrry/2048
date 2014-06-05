@@ -61,14 +61,14 @@ KeyboardInputManager.prototype.listen = function () {
         self.emit("move", mapped);
       }
     }
-    // the B key is for go back.  Cheatingly good right now. 
-    if(!modifiers && event.which === 66){
-      self.emit("back");
-    } 
-    // R key restarts the game
+    //R key restarts the game
     if (!modifiers && event.which === 82) {
       self.restart.call(self, event);
     }
+    // the B key is for go back.  Cheatingly good right now. 
+    if (!modifiers && event.which === 66){
+      self.backitup.call(self, event);
+    } 
   });
 
   // Respond to button presses
@@ -131,13 +131,13 @@ KeyboardInputManager.prototype.listen = function () {
 };
 
 KeyboardInputManager.prototype.restart = function (event) {
-  event.preventDefault();
-  this.emit("restart");
+ event.preventDefault();
+ this.emit("restart");
 };
 
-KeyboardInputManager.prototype.back = function (event) {
+KeyboardInputManager.prototype.backitup = function (event) {
   event.preventDefault();
-  this.emit("back");
+  this.emit("backitup");
 };
 
 KeyboardInputManager.prototype.keepPlaying = function (event) {

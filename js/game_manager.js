@@ -9,7 +9,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
-  this.inputManager.on("back", this.back.bind(this));
+  this.inputManager.on("backitup", this.backitup.bind(this));
 
   this.setup();
 }
@@ -135,9 +135,12 @@ GameManager.prototype.moveTile = function (tile, cell) {
 
 // Go back and remove the most recently added title. Currently this is broken good.
 // as merges don't get undone. 
-GameManager.prototype.back = function () {
-  //if(!this.lastAddedTile || this.isGameTerminated()) return;
-  self.move(1);
+GameManager.prototype.backitup = function () {
+  if(!this.lastAddedTile || this.isGameTerminated()) return;
+  
+  this.grid.removeTile(this.lastAddedTile);
+  // this.move(1);
+  // this.move(3);
 };
 
 // Move tiles on the grid in the specified direction
@@ -145,6 +148,8 @@ GameManager.prototype.move = function (direction) {
   // 0: up, 1: right, 2: down, 3: left
   var self = this;
 
+  if (direction == undefined)
+    direction = 1;
   if (this.isGameTerminated()) return; // Don't do anything if the game's over
 
   var cell, tile;
