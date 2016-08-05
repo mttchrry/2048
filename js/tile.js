@@ -14,6 +14,7 @@ Tile.prototype.savePosition = function () {
 Tile.prototype.updatePosition = function (position) {
   this.x = position.x;
   this.y = position.y;
+  console.log(this.value + ':' + this.y + ":" + this.x + " - - ")
 };
 
 Tile.prototype.serialize = function () {
